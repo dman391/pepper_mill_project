@@ -1,19 +1,22 @@
+#goal : getting multiple links from a page 
+import requests
 from bs4 import BeautifulSoup
-import requests 
 
-url = "https://www.example.com/"
+main_url = "https://www.nzherald.co.nz/nz/kaitaia-homicide-nz-first-pays-tribute-to-far-north-businessman-monty-knight/TQBENVT5WZCYVD4HODE7XBUH5Q/"
 
-my_page = requests.get(url)
-soup = BeautifulSoup(my_page.text, "html")
+main_page = requests.get(main_url)
+my_soup = BeautifulSoup(main_page.text, "html")
 
-data = soup.find("a")
-data = str(data)
-#getting url for second link
+all_links = my_soup.find_all("a", href = True)
 
-start_index = data.find('"')
-link_end_index = data.rfind('"')
 
-url_2 = data[start_index+1:link_end_index]
+final_external_links = []
 
-sub_link_page = requests.get(url_2)
-soup_2 = BeautifulSoup(sub_link_page.text, "html")
+for element in all_links:
+    #element not string by bs4 element tag so can do following
+    if element["href"][0:8] == "https://":
+        final_external_links.append(element["href"])
+
+
+
+print(final_external_links)
