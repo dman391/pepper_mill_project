@@ -1,7 +1,7 @@
-#goal : getting multiple links from a page 
+#ow pandas work
 import requests
 from bs4 import BeautifulSoup
-
+import pandas as pd 
 main_url = "https://www.nzherald.co.nz/nz/kaitaia-homicide-nz-first-pays-tribute-to-far-north-businessman-monty-knight/TQBENVT5WZCYVD4HODE7XBUH5Q/"
 
 main_page = requests.get(main_url)
@@ -17,6 +17,16 @@ for element in all_links:
     if element["href"][0:8] == "https://":
         final_external_links.append(element["href"])
 
-
-
 print(final_external_links)
+
+link_size = []
+for i in final_external_links:
+    link_size.append(len(i))
+
+
+
+data = {"link_size":link_size,"links":final_external_links}
+
+df = pd.DataFrame(data)
+
+df.to_excel("link_length_data.xlsx", index = False)
